@@ -1,6 +1,7 @@
+using EventHorizon.CodeEditorLite.Hubs;
 using Microsoft.AspNetCore.Builder;
 
-namespace EventHorizon.CodeEditorLite.Hubs
+namespace EventHorizon.CodeEditorLite
 {
     public static class HubsExtensions
     {

@@ -6,7 +6,9 @@ class Layout extends Component {
         return (
             <div>
                 <div>
-                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/" exact>
+                        Home
+                    </NavLink>
                     {" | "}
                     <NavLink to="/workspace">Workspace</NavLink>
                 </div>

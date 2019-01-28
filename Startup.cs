@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,8 @@ namespace EventHorizon.CodeEditorLite
             // Add SignalR
             services.AddSignalR();
 
+            // Add MediatR
+            services.AddMediatR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +53,7 @@ namespace EventHorizon.CodeEditorLite
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseHubs();
 
             app.UseMvc(routes =>
             {
