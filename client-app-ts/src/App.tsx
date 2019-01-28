@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route } from "react-router";
 import Layout from "./layout/Layout";
 import Home from "./home/Home";
-import Workspace from "./workspace/Workspace";
+import Workspace from "./workspace/components/Workspace";
 
 class App extends Component {
     render() {
