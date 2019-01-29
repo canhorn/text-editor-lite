@@ -1,13 +1,15 @@
-import { ITreeViewNode } from "../../../shared/components/tree-view/TreeView";
+import { ITreeNode } from '../../../shared/components/my-tree-view/TreeViewModel';
 import {
     IEditorFolder,
     IWorkspaceEditorExplorer
 } from "../../model/IWorkspaceState";
+
 const PARENT_FOLDER_TOKEN = "|||";
 export const createTreeData = (
     editorExplorer: IWorkspaceEditorExplorer
 ): IWorkspaceFileNode =>
     getFolderChildren(editorExplorer.root, editorExplorer.workspace);
+
 const getFolderChildren = (
     folder: IEditorFolder,
     parentFolder: string
@@ -39,6 +41,6 @@ const getFolderChildren = (
 export const splitTreeDataParentFolder = (parentFolder: string): string[] => {
     return parentFolder.split("|||");
 };
-export interface IWorkspaceFileNode extends ITreeViewNode {
+export interface IWorkspaceFileNode extends ITreeNode {
     parentFolder: string;
 }

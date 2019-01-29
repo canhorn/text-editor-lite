@@ -1,8 +1,7 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import { autobind } from "../../../shared/Autobind";
-import TreeView, {
-    ITreeViewNode
-} from "../../../shared/components/tree-view/TreeView";
+import TreeView from "../../../shared/components/my-tree-view/TreeView";
+import { ITreeNode } from "../../../shared/components/my-tree-view/TreeViewModel";
 import { IWorkspaceEditorExplorer } from "../../model/IWorkspaceState";
 import {
     createTreeData,
@@ -16,12 +15,10 @@ interface IProps {
 }
 interface IState {
     treeData: any;
+    cursor?: ITreeNode;
 }
 
-export default class WorkspaceFileExplorer extends PureComponent<
-    IProps,
-    IState
-> {
+export default class WorkspaceFileExplorer extends Component<IProps, IState> {
     state: IState = {
         treeData: createTreeData(this.props.editorExplorer)
     };
@@ -34,13 +31,14 @@ export default class WorkspaceFileExplorer extends PureComponent<
     }
     public render(): JSX.Element {
         const { treeData } = this.state;
-
-        return <TreeView treeData={treeData} onClick={this.onToggle} />;
+        return <TreeView treeData={treeData} onToggle={this.onToggle} />;
     }
 
     @autobind
-    private onToggle(selectedNode: ITreeViewNode): void {
-        var workspaceNode = selectedNode as IWorkspaceFileNode;
+    private onToggle(selectedNode: ITreeNode, toggled: boolean): void {
+        this.validateNode(selectedNode, toggled);
+
+        const workspaceNode = selectedNode as IWorkspaceFileNode;
         if (!workspaceNode.children || workspaceNode.children.length === 0) {
             // Split up the parentFolder by token
             let folderList = splitTreeDataParentFolder(
@@ -58,6 +56,19 @@ export default class WorkspaceFileExplorer extends PureComponent<
                 fileName
             });
         }
+    }
+    private validateNode(node: ITreeNode, toggled: boolean): void {
+        const { cursor } = this.state;
+        if (cursor) {
+            cursor.active = true;
+        }
+        node.active = true;
+        if (node.children) {
+            node.toggled = toggled;
+        }
+        this.setState({
+            cursor: node
+        });
     }
 }
 

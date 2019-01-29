@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Route, RouteComponentProps, Switch } from "react-router";
+import { NavLink } from "react-router-dom";
 import { autobind } from "../../../shared/Autobind";
 import { eventService } from "../../../shared/EventService";
-import { TerminalWindow } from "../../../terminal/Terminal";
 import { sendWorkspaceCommandToServer } from "../../command/SendWorkspaceCommandToServer";
 import {
     getWorkspaceList,
@@ -13,10 +13,8 @@ import {
     getWorkspaceByName,
     WORKSPACE_STORE_CHANGED
 } from "../../store/WorkspaceStore";
-import WorkspaceTerminal from "../terminal/WorkspaceTerminal";
 import WorkspaceEditor from "../editor/WorkspaceEditor";
-import { NavLink } from "react-router-dom";
-import { Terminal } from "../../../shared/Terminal";
+import WorkspaceTerminal from "../terminal/WorkspaceTerminal";
 
 interface IProps extends RouteComponentProps<{ workspaceName: string }> {}
 interface IState {
@@ -35,6 +33,13 @@ class WorkspaceDashboard extends Component<IProps, IState> {
         );
         await startWorkspaceConnection();
         await getWorkspaceList();
+    }
+    public componentWillUnmount() {
+        eventService.off(
+            WORKSPACE_STORE_CHANGED,
+            this.onWorkspaceStoreChanged,
+            this
+        );
     }
     public render(): JSX.Element {
         const { workspace } = this.state;
@@ -61,7 +66,7 @@ class WorkspaceDashboard extends Component<IProps, IState> {
                         )}
                     />
                     <Route
-                        path={[`/workspace/${workspace.name}`]}
+                        path={`/workspace/${workspace.name}`}
                         render={() => <WorkspaceEditor workspace={workspace} />}
                     />
                 </Switch>
