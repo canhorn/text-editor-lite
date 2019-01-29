@@ -103,7 +103,6 @@ class WorkspaceConnectionImpl {
     public async saveWorkspacePendingFileContent(
         fileContent: IWorkspaceFileContent
     ) {
-        console.log(fileContent);
         if (!this._connection) {
             throw new Error("not_connected");
         }
