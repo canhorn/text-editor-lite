@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { CSSProperties } from "react";
 import deepEqual from "../../../deep-equal/DeepEqual";
 import { shallowEqualObjects } from "../../../shallow-equal/ShallowEqual";
 import {
@@ -52,18 +52,34 @@ class NodeHeader extends React.Component<IProps, {}> {
         const { animations, decorators, node, onClick, style } = this.props;
         const { active, children } = node;
         const terminal = !children;
-        const container = [style.link, active ? style.activeLink : null];
-        const headerStyles = Object.assign({ container }, style);
-
+        const container = [style.link];
+        if (active) {
+            container.push(style.activeLink);
+        }
         return (
             <decorators.Container
                 animations={animations}
                 decorators={decorators}
                 node={node}
                 onClick={onClick}
-                style={headerStyles}
+                style={this.getHeaderContainerStyles(style, container)}
                 terminal={terminal}
             />
+        );
+    }
+    private getHeaderContainerStyles(
+        style: ITreeNodeStyles,
+        container: (CSSProperties | null)[]
+    ) {
+        return Object.assign(
+            {
+                container: container.reduce(
+                    (prevValue, currentValue) =>
+                        Object.assign(prevValue, currentValue),
+                    {}
+                )
+            },
+            style
         );
     }
 }

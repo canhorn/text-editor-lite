@@ -1,7 +1,6 @@
 
 # ToDo's
 
-- [ ] Update Terminal Hub to use persistence Terminal Processes.
 - [ ] Create Cool Home Page
 - [ ] Update Page Layout
   - [ ] Set color based on current Home Page, dark themed site.
@@ -23,3 +22,4 @@
     - [ ] New folder will be created next to open file.
     - [ ] No file selected will create in root of Workspace.
   - [ ] Add ability to delete folders
+- [ ] Update Terminal Hub to use persistence Terminal Processes.
