@@ -50,11 +50,17 @@ class WorkspaceDashboard extends Component<IProps, IState> {
             <div>
                 <h1>{workspace.name} - Workspace Dashboard</h1>
                 <div>
-                    <NavLink to={`/workspace/${workspace.name}`} exact>
+                    <NavLink
+                        className="nav-link"
+                        to={`/workspace/${workspace.name}`}
+                        exact
+                    >
                         Editor
                     </NavLink>
-                    {" | "}
-                    <NavLink to={`/workspace/${workspace.name}/terminal`}>
+                    <NavLink
+                        className="nav-link"
+                        to={`/workspace/${workspace.name}/terminal`}
+                    >
                         Terminal
                     </NavLink>
                 </div>

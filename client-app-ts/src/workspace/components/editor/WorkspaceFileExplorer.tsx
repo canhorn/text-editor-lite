@@ -60,7 +60,7 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
     private validateNode(node: ITreeNode, toggled: boolean): void {
         const { cursor } = this.state;
         if (cursor) {
-            cursor.active = true;
+            cursor.active = false;
         }
         node.active = true;
         if (node.children) {

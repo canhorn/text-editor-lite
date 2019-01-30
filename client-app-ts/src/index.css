@@ -1,4 +1,6 @@
 body {
+    color: white;
+    background-color: #1e1e1e;
     margin: 0;
     padding: .3em;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -14,7 +16,19 @@ pre {
         monospace;
 }
 
-a.active {
-    border-bottom-width: 5px;
+/* Global NavLink edit */
+a.nav-link {
+    color: white;
+    text-decoration: none;
+    margin-right: 1em;
+}
+
+a.nav-link:hover {
+    color: gray;
+}
+
+a.nav-link.active {
+    color: gray;
+    border-bottom-width: 0.1em;
     border-bottom-style: solid;
 }

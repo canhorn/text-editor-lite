@@ -35,6 +35,7 @@ class WorkspaceList extends Component<IProps, IState> {
                 <h1>Workspace List</h1>
                 {workspaceList.map(workspace => (
                     <NavLink
+                        className="nav-link"
                         key={workspace.name}
                         to={`/workspace/${workspace.name}`}
                     >

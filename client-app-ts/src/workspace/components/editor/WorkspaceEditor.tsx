@@ -73,13 +73,31 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                         width: "100%"
                     }}
                 >
-                    <div style={{ height: "100%" }}>
+                    <div
+                        style={{
+                            height: "100%",
+                            borderWidth: "thin 0px thin thin",
+                            borderStyle: "solid",
+                            borderColor: "gray",
+                            padding: "0.1em",
+                            minHeight: "20em"
+                        }}
+                    >
                         <WorkspaceFileExplorer
                             editorExplorer={editorExplorer}
                             onFileSelected={this.onFileSelected}
                         />
                     </div>
-                    <div style={{}}>
+                    <div
+                        style={{
+                            height: "100%",
+                            borderWidth: "thin thin thin 0px",
+                            borderStyle: "solid",
+                            borderColor: "gray",
+                            padding: "0.1em",
+                            minHeight: "20em"
+                        }}
+                    >
                         <WorkspaceFileEdit fileContent={fileContent} />
                     </div>
                 </div>
