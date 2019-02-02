@@ -233,3 +233,5 @@ _Pvt_Extensions
 
 # ASP.NET ignored AppSettings
 appsettings.*.json
+
+App_Data/**
