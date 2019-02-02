@@ -47,7 +47,12 @@ export class TerminalWindow extends Component<IProps, IState> {
     }
 
     public render() {
-        return <div id={this.state.id} style={{ height: "300px" }} />;
+        return (
+            <div
+                id={this.state.id}
+                style={{ height: "100%" }}
+            />
+        );
     }
 
     private onClose() {}
