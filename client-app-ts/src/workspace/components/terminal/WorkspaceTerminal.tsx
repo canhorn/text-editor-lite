@@ -12,8 +12,7 @@ interface IState {}
 export default class WorkspaceTerminal extends Component<IProps, IState> {
     public render(): JSX.Element {
         return (
-            <div>
-                <h2>Terminal Service</h2>
+            <div style={{ padding: ".3em", height: "45em" }}>
                 <TerminalWindow onCommand={this.onCommand} />
             </div>
         );
