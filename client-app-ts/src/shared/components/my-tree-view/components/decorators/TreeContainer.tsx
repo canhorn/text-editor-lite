@@ -1,26 +1,26 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { VelocityComponent } from "velocity-react";
-import Header from "./TreeHeader";
 import {
-    ITreeNodeStyles,
     ITreeAnimations,
     ITreeDecorators,
-    ITreeNode
+    ITreeNode,
+    ITreeNodeStyles
 } from "../../TreeViewModel";
+import Header from "./TreeHeader";
 
 interface IProps {
     style: ITreeNodeStyles;
-    node: ITreeNode;
+    node: ITreeNode<any>;
     animations: ITreeAnimations;
     decorators: ITreeDecorators;
     terminal: boolean;
     onClick: () => void;
+    onHover: () => void;
     onContextMenu: (event: React.MouseEvent) => void;
 }
 
 export default class Container extends Component<IProps, {}> {
-    private clickableRef: any;
     public static propTypes = {
         style: PropTypes.object.isRequired,
         decorators: PropTypes.object.isRequired,
@@ -31,13 +31,20 @@ export default class Container extends Component<IProps, {}> {
         node: PropTypes.object.isRequired
     };
     public render() {
-        const { style, terminal, onClick, onContextMenu, node } = this.props;
+        const {
+            style,
+            terminal,
+            onClick,
+            onHover,
+            onContextMenu,
+            node
+        } = this.props;
 
         return (
             <div
                 onClick={onClick}
+                onMouseEnter={onHover}
                 onContextMenu={onContextMenu}
-                ref={ref => (this.clickableRef = ref)}
                 style={style.container}
             >
                 {!terminal ? this.renderToggle() : null}

@@ -23,6 +23,9 @@ export default {
         activeLink: {
             background: "#31363F"
         },
+        hover: {
+            background: "#31363F"
+        },
         toggle: {
             base: {
                 position: "relative",

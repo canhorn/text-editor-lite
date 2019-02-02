@@ -16,8 +16,10 @@ interface IProps {
     treeData: any;
     animations: ITreeAnimationsFactory;
     decorators: ITreeDecorators;
-    onToggle: (node: ITreeNode, toggled: boolean) => void;
-    onOpenContextMenu: (node: ITreeNode, event: React.MouseEvent) => void;
+    onToggle: (node: ITreeNode<any>, toggled: boolean) => void;
+    onHover: (node: ITreeNode<any>) => void;
+    onOpenContextMenu: (node: ITreeNode<any>, event: React.MouseEvent) => void;
+    onMouseLeave: () => void;
 }
 interface IState {}
 
@@ -41,7 +43,9 @@ class TreeView extends React.Component<IProps, IState> {
             decorators,
             treeData,
             onToggle,
+            onHover,
             onOpenContextMenu,
+            onMouseLeave,
             style
         } = this.props;
         let data = treeData;
@@ -51,14 +55,15 @@ class TreeView extends React.Component<IProps, IState> {
             data = [data];
         }
         return (
-            <ul style={style.base}>
-                {data.map((node: ITreeNode, index: number) => (
+            <ul style={style.base} onMouseLeave={onMouseLeave}>
+                {data.map((node: ITreeNode<any>, index: number) => (
                     <TreeNode
                         animations={animations}
                         decorators={decorators}
                         key={node.id || index}
                         node={node}
                         onToggle={onToggle}
+                        onHover={onHover}
                         onOpenContextMenu={onOpenContextMenu}
                         style={style.node}
                     />

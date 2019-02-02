@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { autobind } from "../../../../shared/Autobind";
-import { showMessage } from "../../../../shared/components/toaster/ToasterActions";
 import "./ContextMenu.css";
 
 interface IProps {
@@ -70,13 +69,11 @@ export default class ContextMenu extends Component<IProps, IState> {
 
     @autobind
     private onDocumentClickCloseMenu(event: MouseEvent) {
-        event.preventDefault();
         this.props.onClose();
     }
 
     @autobind
     private onDocumentContextMenuCloseMenu(event: MouseEvent) {
-        event.preventDefault();
         const { target } = this.props;
 
         if (event.target !== target) {

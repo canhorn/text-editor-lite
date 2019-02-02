@@ -76,7 +76,6 @@ class WorkspaceDashboard extends Component<IProps, IState> {
                         render={() => <WorkspaceEditor workspace={workspace} />}
                     />
                 </Switch>
-                <pre>{JSON.stringify(this.state, null, 4)}</pre>
             </div>
         );
     }

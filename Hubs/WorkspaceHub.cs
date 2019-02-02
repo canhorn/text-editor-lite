@@ -62,6 +62,13 @@ namespace EventHorizon.CodeEditorLite.Hubs
             );
         }
 
+        public Task<WorkspaceCommandResponse> CreateNewWorkspaceFile(string workspace, string[] folderList, string fileName)
+        {
+            return _mediator.Send(
+                new CreateWorkspaceFileCommand(workspace, folderList, fileName)
+            );
+        }
+
         public Task<WorkspaceEditorExplorer> GetWorkspaceEditorExplorer(string workspace)
         {
             return _mediator.Send(

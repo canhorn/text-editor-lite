@@ -4,7 +4,7 @@ import { ITreeHeaderStyles, ITreeNode } from "../../TreeViewModel";
 
 interface IProps {
     style: ITreeHeaderStyles;
-    node: ITreeNode;
+    node: ITreeNode<any>;
 }
 
 export default class Header extends Component<IProps, {}> {

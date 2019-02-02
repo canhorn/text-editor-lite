@@ -19,6 +19,7 @@ import { autobind } from "../../../shared/Autobind";
 import WorkspaceFileEdit from "./content/WorkspaceFileEdit";
 import { CLEAR_WORKSPACE_PENDING_SAVE_EVENT } from "../../store/WorkspaceStore";
 import { saveWorkspacePendingFileContent } from "../../connection/WorkspaceConnectionActions";
+import { resizeEditors } from "../../../editor/EditorActions";
 
 interface IProps {
     workspace: IWorkspace;
@@ -64,23 +65,25 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
         }
 
         return (
-            <div>
-                <h2>Editor</h2>
+            <div style={{ padding: ".3em" }}>
                 <div
                     style={{
                         display: "inline-grid",
                         gridTemplateColumns: "25% 75%",
-                        width: "100%"
+                        width: "100%",
+                        height: "100%",
+                        borderWidth: "thin",
+                        borderStyle: "solid",
+                        borderColor: "gray",
+                        maxHeight: "720px",
+                        overflow: "hidden"
                     }}
                 >
                     <div
                         style={{
-                            height: "100%",
-                            borderWidth: "thin 0px thin thin",
-                            borderStyle: "solid",
-                            borderColor: "gray",
                             padding: "0.1em",
-                            minHeight: "20em"
+                            minHeight: "20em",
+                            overflowY: "auto"
                         }}
                     >
                         <WorkspaceFileExplorer
@@ -90,10 +93,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                     </div>
                     <div
                         style={{
-                            height: "100%",
-                            borderWidth: "thin thin thin 0px",
-                            borderStyle: "solid",
-                            borderColor: "gray",
+                            height: "99%",
                             padding: "0.1em",
                             minHeight: "20em"
                         }}
@@ -101,8 +101,6 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                         <WorkspaceFileEdit fileContent={fileContent} />
                     </div>
                 </div>
-                <pre>{JSON.stringify(editorExplorer, null, 4)}</pre>
-                <pre>{JSON.stringify(fileContent, null, 4)}</pre>
             </div>
         );
     }
@@ -138,6 +136,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
             selectedFile,
             fileContent: this.getFileContent(selectedFile)
         });
+        resizeEditors();
     }
     private getFileContent(
         selectedFile: ISelectedFile | undefined
