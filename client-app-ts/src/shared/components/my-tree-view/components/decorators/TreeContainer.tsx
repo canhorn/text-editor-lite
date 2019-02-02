@@ -16,6 +16,7 @@ interface IProps {
     decorators: ITreeDecorators;
     terminal: boolean;
     onClick: () => void;
+    onContextMenu: (event: React.MouseEvent) => void;
 }
 
 export default class Container extends Component<IProps, {}> {
@@ -30,11 +31,12 @@ export default class Container extends Component<IProps, {}> {
         node: PropTypes.object.isRequired
     };
     public render() {
-        const { style, terminal, onClick, node } = this.props;
+        const { style, terminal, onClick, onContextMenu, node } = this.props;
 
         return (
             <div
                 onClick={onClick}
+                onContextMenu={onContextMenu}
                 ref={ref => (this.clickableRef = ref)}
                 style={style.container}
             >

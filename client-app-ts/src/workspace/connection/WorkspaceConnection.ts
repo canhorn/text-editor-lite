@@ -13,7 +13,7 @@ import {
     WORKSPACE_DISCONNECTED_EVENT
 } from "../store/WorkspaceStore";
 import { getWorkspaceList } from "./WorkspaceConnectionActions";
-import { IWorkspaceCommandResponse } from '../model/IWorkspaceCommandResponse';
+import { IWorkspaceCommandResponse } from "../model/IWorkspaceCommandResponse";
 
 class WorkspaceConnectionImpl {
     _connection: HubConnection | undefined = undefined;
@@ -66,7 +66,9 @@ class WorkspaceConnectionImpl {
         });
         return workspaceList;
     }
-    public async createWorkspace(workspace: string): Promise<IWorkspaceCommandResponse> {
+    public async createWorkspace(
+        workspace: string
+    ): Promise<IWorkspaceCommandResponse> {
         if (!this._connection) {
             throw new Error("not_connected");
         }
@@ -78,7 +80,24 @@ class WorkspaceConnectionImpl {
         getWorkspaceList();
         return workspaceCreated;
     }
-    public async deleteWorkspace(workspace: string): Promise<IWorkspaceCommandResponse> {
+    public async createNewWorkspaceFolder(
+        workspace: string,
+        folders: string[],
+        folderName: string
+    ): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        return await this._connection.invoke(
+            "CreateNewWorkspaceFolder",
+            workspace,
+            folders,
+            folderName
+        );
+    }
+    public async deleteWorkspace(
+        workspace: string
+    ): Promise<IWorkspaceCommandResponse> {
         if (!this._connection) {
             throw new Error("not_connected");
         }
@@ -86,8 +105,6 @@ class WorkspaceConnectionImpl {
             "DeleteWorkspace",
             workspace
         );
-        // Request the updated workspace list.
-        getWorkspaceList();
         return workspaceCreated;
     }
     public async getWorkspaceEditorExplorer(

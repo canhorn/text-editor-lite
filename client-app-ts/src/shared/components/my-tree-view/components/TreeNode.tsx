@@ -17,6 +17,7 @@ interface IProps {
     animations: ITreeAnimationsFactory | boolean;
     decorators: ITreeDecorators;
     onToggle: (node: ITreeNode, toggled: boolean) => void;
+    onOpenContextMenu: (node: ITreeNode, event: React.MouseEvent) => void;
 }
 interface IState {}
 
@@ -40,6 +41,14 @@ class TreeNode extends React.Component<IProps, IState> {
 
         if (onToggle) {
             onToggle(node, !toggled);
+        }
+    }
+    @autobind
+    onContextMenu(event: React.MouseEvent) {
+        const { node, onOpenContextMenu } = this.props;
+
+        if (onOpenContextMenu) {
+            onOpenContextMenu(node, event);
         }
     }
 
@@ -114,6 +123,7 @@ class TreeNode extends React.Component<IProps, IState> {
                 animations={animations}
                 decorators={decorators}
                 onClick={this.onClick}
+                onContextMenu={this.onContextMenu}
                 style={style}
             />
         );
@@ -165,10 +175,11 @@ class TreeNode extends React.Component<IProps, IState> {
     }
 
     _eventBubbles() {
-        const { onToggle } = this.props;
+        const { onToggle, onOpenContextMenu } = this.props;
 
         return {
-            onToggle
+            onToggle,
+            onOpenContextMenu
         };
     }
 }

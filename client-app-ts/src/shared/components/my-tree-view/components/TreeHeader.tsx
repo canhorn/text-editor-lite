@@ -15,6 +15,7 @@ interface IProps {
     decorators: ITreeDecorators;
     propsData?: any;
     onClick: () => void;
+    onContextMenu: (event: React.MouseEvent) => void;
     style: ITreeNodeStyles;
 }
 
@@ -49,7 +50,14 @@ class NodeHeader extends React.Component<IProps, {}> {
     }
 
     render() {
-        const { animations, decorators, node, onClick, style } = this.props;
+        const {
+            animations,
+            decorators,
+            node,
+            onClick,
+            onContextMenu,
+            style
+        } = this.props;
         const { active, children } = node;
         const terminal = !children;
         const container = [style.link];
@@ -62,6 +70,7 @@ class NodeHeader extends React.Component<IProps, {}> {
                 decorators={decorators}
                 node={node}
                 onClick={onClick}
+                onContextMenu={onContextMenu}
                 style={this.getHeaderContainerStyles(style, container)}
                 terminal={terminal}
             />
