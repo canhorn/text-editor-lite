@@ -26,3 +26,5 @@
   - [X] ~~*Add ability to Create new folders*~~ [2019/02/02T16:25:08]
     - New Folder will be created in the folder or next to the file right-clicked on.
   - [X] ~~*Add ability to delete folders*~~ [2019/02/02T16:25:31]
+- [X] ~~*Fix Terminal Input font to match other font of Terminal.*~~ [2019/02/02T16:47:28]
+  - 

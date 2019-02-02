@@ -187,7 +187,8 @@ export class Terminal implements ITerminal {
         this.setWidth("100%");
         this.setHeight("100%");
 
-        this.html.style.fontFamily = "Monaco, Courier";
+        this.html.style.fontFamily =
+            'source-code-pro, Menlo, Monaco, Consolas,"Courier New", monospace';
         this.html.style.margin = "0";
         this.html.style.overflowY = "auto";
         this._innerWindow.style.height = "100%";
