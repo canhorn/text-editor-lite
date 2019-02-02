@@ -1,21 +1,22 @@
 import React, { Component } from "react";
+import { resizeEditors } from "../../../editor/EditorActions";
 import { autobind } from "../../../shared/Autobind";
 import TreeView from "../../../shared/components/my-tree-view/TreeView";
 import { ITreeNode } from "../../../shared/components/my-tree-view/TreeViewModel";
-import { IWorkspaceEditorExplorer } from "../../model/IWorkspaceState";
 import {
-    showMessage,
-    showErrorMessage
+    showErrorMessage,
+    showMessage
 } from "../../../shared/components/toaster/ToasterActions";
-import ContextMenu from "./contextMenu/ContextMenu";
 import {
+    createNewWorkspaceFile,
     createNewWorkspaceFolder,
     getWorkspaceEditorExplorer
 } from "../../connection/WorkspaceConnectionActions";
 import { IWorkspaceCommandResponse } from "../../model/IWorkspaceCommandResponse";
-import {
-    IContentMenuItem,
+import { IWorkspaceEditorExplorer } from "../../model/IWorkspaceState";
+import ContextMenu, {
     getMousePosition,
+    IContentMenuItem,
     IMousePosition
 } from "./contextMenu/ContextMenu";
 import {
@@ -30,7 +31,8 @@ interface IProps {
 }
 interface IState {
     treeData: any;
-    cursor?: ITreeNode;
+    hoverCursor?: ITreeNode<IWorkspaceFileNode>;
+    cursor?: ITreeNode<IWorkspaceFileNode>;
     contextMenuOpenedAt?: IWorkspaceFileNode;
     contextMenuOpenedPosition?: IMousePosition;
     contextMenuOpenedTarget?: any;
@@ -62,7 +64,9 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
                 <TreeView
                     treeData={treeData}
                     onToggle={this.onToggle}
+                    onHover={this.onHover}
                     onOpenContextMenu={this.onOpenContextMenu}
+                    onMouseLeave={this.onMouseLeave}
                 />
                 <ContextMenu
                     open={!!contextMenuOpenedAt}
@@ -89,7 +93,7 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
                 key: "menu-item-2",
                 type: "ITEM",
                 label: "New File",
-                onClick: () => showMessage("Menu Item 2 Clicked")
+                onClick: this.createNewFile
             },
             {
                 key: "menu-spacer-1",
@@ -133,6 +137,8 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
             showErrorMessage(
                 "Workspace already contains a folder by that name."
             );
+        } else if (response.errorCode === "workspace_folder_invalid_name") {
+            showErrorMessage("Workspace folder name invalid.");
         } else {
             showErrorMessage(
                 `Cannot create workspace folder, ${response.errorCode}`
@@ -141,7 +147,48 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
     }
 
     @autobind
-    private onToggle(selectedNode: ITreeNode, toggled: boolean): void {
+    private createNewFile() {
+        const { contextMenuOpenedAt } = this.state;
+        const fileName = prompt("Name of new File?");
+        if (fileName !== null && contextMenuOpenedAt !== undefined) {
+            // Split up the parentFolder by token
+            let folderList = splitTreeDataParentFolder(
+                contextMenuOpenedAt.parentFolder
+            );
+            // Get Workspace folderList[0]
+            const workspace = folderList[0];
+            // Get Folder List, minus Workspace root folder
+            folderList = folderList.slice(1);
+            createNewWorkspaceFile(workspace, folderList, fileName).then(
+                this.onWorkspaceFileCreated
+            );
+        }
+    }
+    @autobind
+    private onWorkspaceFileCreated(response: IWorkspaceCommandResponse) {
+        if (response.success) {
+            showMessage("Successfully Created Workspace File");
+            getWorkspaceEditorExplorer(this.props.editorExplorer.workspace);
+        } else if (response.errorCode === "workspace_contains_file") {
+            showErrorMessage("Workspace already contains a file by that name.");
+        } else if (response.errorCode === "workspace_folder_exists") {
+            showErrorMessage(
+                "Workspace already contains a folder by that name."
+            );
+        } else if (response.errorCode === "workspace_file_invalid_name") {
+            showErrorMessage("Workspace file name invalid.");
+        } else {
+            showErrorMessage(
+                `Cannot create workspace file, ${response.errorCode}`
+            );
+        }
+    }
+
+    @autobind
+    private onToggle(
+        selectedNode: ITreeNode<IWorkspaceFileNode>,
+        toggled: boolean
+    ): void {
         this.validateNode(selectedNode, toggled);
 
         const workspaceNode = selectedNode as IWorkspaceFileNode;
@@ -161,10 +208,20 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
                 folderList,
                 fileName
             });
+        } else {
+            resizeEditors();
         }
     }
     @autobind
-    private onOpenContextMenu(node: ITreeNode, event: React.MouseEvent): void {
+    private onHover(selectedNode: ITreeNode<IWorkspaceFileNode>): void {
+        this.validateHoverNode(selectedNode);
+    }
+    @autobind
+    private onOpenContextMenu(
+        node: ITreeNode<IWorkspaceFileNode>,
+        event: React.MouseEvent
+    ): void {
+        event.preventDefault();
         showMessage("onOpenContextMenu");
         this.setState({
             contextMenuOpenedAt: node as IWorkspaceFileNode,
@@ -172,7 +229,20 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
             contextMenuOpenedTarget: event.target
         });
     }
-    private validateNode(node: ITreeNode, toggled: boolean): void {
+    @autobind
+    private onMouseLeave() {
+        const { hoverCursor } = this.state;
+        if (hoverCursor) {
+            hoverCursor.hover = false;
+        }
+        this.setState({
+            hoverCursor
+        });
+    }
+    private validateNode(
+        node: ITreeNode<IWorkspaceFileNode>,
+        toggled: boolean
+    ): void {
         const { cursor } = this.state;
         if (cursor) {
             cursor.active = false;
@@ -183,6 +253,16 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
         }
         this.setState({
             cursor: node
+        });
+    }
+    private validateHoverNode(node: ITreeNode<IWorkspaceFileNode>): void {
+        const { hoverCursor } = this.state;
+        if (hoverCursor) {
+            hoverCursor.hover = false;
+        }
+        node.hover = true;
+        this.setState({
+            hoverCursor: node
         });
     }
 }

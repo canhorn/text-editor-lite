@@ -1,8 +1,10 @@
 import * as monaco from "monaco-editor";
 import * as React from "react";
-import { guid } from "../shared/Guid";
-import { registerEditorServiceWorker } from "./RegisterEditorServiceWorker";
 import { autobind } from "../shared/Autobind";
+import { eventService } from "../shared/EventService";
+import { guid } from "../shared/Guid";
+import { RESIZE_EDITOR } from "./EditorActions";
+import { registerEditorServiceWorker } from "./RegisterEditorServiceWorker";
 
 registerEditorServiceWorker();
 
@@ -32,6 +34,7 @@ export class TextContentEditor extends React.Component<IProps, IState> {
             }
         );
         window.addEventListener("resize", this.onResize);
+        eventService.on(RESIZE_EDITOR, this.onResize, this);
         this.editor.onDidChangeModelContent(
             (_: monaco.editor.IModelContentChangedEvent) => {
                 if (this.editor) {
@@ -51,6 +54,7 @@ export class TextContentEditor extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount() {
+        eventService.off(RESIZE_EDITOR, this.onResize, this);
         window.removeEventListener("resize", this.onResize);
         if (this.editor) {
             this.editor.dispose();
@@ -62,7 +66,8 @@ export class TextContentEditor extends React.Component<IProps, IState> {
     }
     private getStyles() {
         return {
-            height: "400px"
+            height: "98%",
+            maxHeight: "800px"
         };
     }
 

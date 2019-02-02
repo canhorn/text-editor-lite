@@ -1,11 +1,12 @@
 import React, { ComponentType, CSSProperties } from "react";
 
-export interface ITreeNode {
+export interface ITreeNode<T> {
     id?: string | number;
+    hover?: boolean;
     active?: boolean;
     name: string;
     loading?: boolean;
-    children: any[]; // TODO: change from any type.
+    children?: T[];
     toggled?: boolean;
     animations?: ITreeAnimationsFactory;
     decorators?: ITreeDecorators;
@@ -48,6 +49,7 @@ export interface ITreeNodeStyles {
     container?: CSSProperties;
     link: CSSProperties;
     activeLink: CSSProperties;
+    hover: CSSProperties;
     toggle: ITreeToggleStyles;
     header: ITreeHeaderStyles;
     subtree: CSSProperties;

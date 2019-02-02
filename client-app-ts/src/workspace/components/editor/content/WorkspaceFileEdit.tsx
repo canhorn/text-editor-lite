@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { IWorkspaceFileContent } from "../../../model/IWorkspaceState";
 import { TextContentEditor } from "../../../../editor/TextContentEditor";
 import { autobind } from "../../../../shared/Autobind";
 import { eventService } from "../../../../shared/EventService";
+import { IWorkspaceFileContent } from "../../../model/IWorkspaceState";
 import {
     SET_WORKSPACE_FILE_CONTENT_EVENT,
     SET_WORKSPACE_PENDING_SAVE_EVENT
@@ -21,12 +21,10 @@ export default class WorkspaceFileEdit extends Component<IProps, IState> {
         }
 
         return (
-            <div>
-                <TextContentEditor
-                    initialValue={fileContent.content}
-                    onChange={this.onContentChanged}
-                />
-            </div>
+            <TextContentEditor
+                initialValue={fileContent.content}
+                onChange={this.onContentChanged}
+            />
         );
     }
     @autobind

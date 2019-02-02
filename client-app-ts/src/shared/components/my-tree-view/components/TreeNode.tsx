@@ -3,21 +3,22 @@ import React from "react";
 import { VelocityTransitionGroup } from "velocity-react";
 import { autobind } from "../../../Autobind";
 import {
+    ITreeAnimations,
     ITreeAnimationsFactory,
     ITreeDecorators,
     ITreeNode,
     ITreeNodeStyles
 } from "../TreeViewModel";
 import NodeHeader from "./TreeHeader";
-import { ITreeAnimations } from "../TreeViewModel";
 
 interface IProps {
     style: ITreeNodeStyles;
-    node: ITreeNode;
+    node: ITreeNode<any>;
     animations: ITreeAnimationsFactory | boolean;
     decorators: ITreeDecorators;
-    onToggle: (node: ITreeNode, toggled: boolean) => void;
-    onOpenContextMenu: (node: ITreeNode, event: React.MouseEvent) => void;
+    onToggle: (node: ITreeNode<any>, toggled: boolean) => void;
+    onHover: (node: ITreeNode<any>) => void;
+    onOpenContextMenu: (node: ITreeNode<any>, event: React.MouseEvent) => void;
 }
 interface IState {}
 
@@ -41,6 +42,14 @@ class TreeNode extends React.Component<IProps, IState> {
 
         if (onToggle) {
             onToggle(node, !toggled);
+        }
+    }
+    @autobind
+    onHover() {
+        const { node, onHover } = this.props;
+
+        if (onHover) {
+            onHover(node);
         }
     }
     @autobind
@@ -123,6 +132,7 @@ class TreeNode extends React.Component<IProps, IState> {
                 animations={animations}
                 decorators={decorators}
                 onClick={this.onClick}
+                onHover={this.onHover}
                 onContextMenu={this.onContextMenu}
                 style={style}
             />
@@ -141,7 +151,7 @@ class TreeNode extends React.Component<IProps, IState> {
             return this.renderLoading(decorators);
         }
 
-        let children: any[] = node.children;
+        let children: any[] = node.children || [];
         if (!Array.isArray(node.children)) {
             children = [node.children];
         }
@@ -175,10 +185,11 @@ class TreeNode extends React.Component<IProps, IState> {
     }
 
     _eventBubbles() {
-        const { onToggle, onOpenContextMenu } = this.props;
+        const { onToggle, onHover, onOpenContextMenu } = this.props;
 
         return {
             onToggle,
+            onHover,
             onOpenContextMenu
         };
     }

@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@aspnet/signalr";
 import { eventService } from "../../shared/EventService";
+import { IWorkspaceCommandResponse } from "../model/IWorkspaceCommandResponse";
 import {
     IWorkspace,
     IWorkspaceEditorExplorer,
@@ -13,7 +14,6 @@ import {
     WORKSPACE_DISCONNECTED_EVENT
 } from "../store/WorkspaceStore";
 import { getWorkspaceList } from "./WorkspaceConnectionActions";
-import { IWorkspaceCommandResponse } from "../model/IWorkspaceCommandResponse";
 
 class WorkspaceConnectionImpl {
     _connection: HubConnection | undefined = undefined;
@@ -93,6 +93,21 @@ class WorkspaceConnectionImpl {
             workspace,
             folders,
             folderName
+        );
+    }
+    public async createNewWorkspaceFile(
+        workspace: string,
+        folders: string[],
+        fileName: string
+    ): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        return await this._connection.invoke(
+            "CreateNewWorkspaceFile",
+            workspace,
+            folders,
+            fileName
         );
     }
     public async deleteWorkspace(

@@ -10,11 +10,12 @@ import {
 } from "../TreeViewModel";
 
 interface IProps {
-    node: ITreeNode;
+    node: ITreeNode<any>;
     animations: ITreeAnimations | false;
     decorators: ITreeDecorators;
     propsData?: any;
     onClick: () => void;
+    onHover: () => void;
     onContextMenu: (event: React.MouseEvent) => void;
     style: ITreeNodeStyles;
 }
@@ -55,14 +56,18 @@ class NodeHeader extends React.Component<IProps, {}> {
             decorators,
             node,
             onClick,
+            onHover,
             onContextMenu,
             style
         } = this.props;
-        const { active, children } = node;
+        const { hover, active, children } = node;
         const terminal = !children;
         const container = [style.link];
         if (active) {
             container.push(style.activeLink);
+        }
+        if (hover) {
+            container.push(style.hover);
         }
         return (
             <decorators.Container
@@ -70,6 +75,7 @@ class NodeHeader extends React.Component<IProps, {}> {
                 decorators={decorators}
                 node={node}
                 onClick={onClick}
+                onHover={onHover}
                 onContextMenu={onContextMenu}
                 style={this.getHeaderContainerStyles(style, container)}
                 terminal={terminal}
