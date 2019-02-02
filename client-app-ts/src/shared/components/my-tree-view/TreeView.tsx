@@ -17,6 +17,7 @@ interface IProps {
     animations: ITreeAnimationsFactory;
     decorators: ITreeDecorators;
     onToggle: (node: ITreeNode, toggled: boolean) => void;
+    onOpenContextMenu: (node: ITreeNode, event: React.MouseEvent) => void;
 }
 interface IState {}
 
@@ -40,6 +41,7 @@ class TreeView extends React.Component<IProps, IState> {
             decorators,
             treeData,
             onToggle,
+            onOpenContextMenu,
             style
         } = this.props;
         let data = treeData;
@@ -57,6 +59,7 @@ class TreeView extends React.Component<IProps, IState> {
                         key={node.id || index}
                         node={node}
                         onToggle={onToggle}
+                        onOpenContextMenu={onOpenContextMenu}
                         style={style.node}
                     />
                 ))}

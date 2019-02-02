@@ -1,4 +1,4 @@
-import { ITreeNode } from '../../../shared/components/my-tree-view/TreeViewModel';
+import { ITreeNode } from "../../../shared/components/my-tree-view/TreeViewModel";
 import {
     IEditorFolder,
     IWorkspaceEditorExplorer
@@ -6,16 +6,19 @@ import {
 
 const PARENT_FOLDER_TOKEN = "|||";
 export const createTreeData = (
-    editorExplorer: IWorkspaceEditorExplorer
+    editorExplorer: IWorkspaceEditorExplorer,
+    treeData?: IWorkspaceFileNode
 ): IWorkspaceFileNode =>
-    getFolderChildren(editorExplorer.root, editorExplorer.workspace);
+    getFolderChildren(editorExplorer.root, editorExplorer.workspace, treeData);
 
 const getFolderChildren = (
     folder: IEditorFolder,
-    parentFolder: string
+    parentFolder: string,
+    treeData?: IWorkspaceFileNode
 ): IWorkspaceFileNode => {
     const children: any[] = [];
-    // TODO: Add Sub Folders
+    // TODO: Using existing TreeData keep state; toggled, active
+    // Add Sub Folders
     folder.folderList.forEach(folder =>
         children.push(
             getFolderChildren(
