@@ -59,6 +59,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
         window.clearInterval(this.saveContentHandler);
     }
     public render(): JSX.Element {
+        const maxHeight = "45em";
         const { editorExplorer, fileContent } = this.state;
         if (!editorExplorer) {
             return <div>Loading Explorer...</div>;
@@ -75,7 +76,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                         borderWidth: "thin",
                         borderStyle: "solid",
                         borderColor: "gray",
-                        maxHeight: "720px",
+                        maxHeight,
                         overflow: "hidden"
                     }}
                 >
@@ -83,6 +84,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                         style={{
                             padding: "0.1em",
                             minHeight: "20em",
+                            maxHeight,
                             overflowY: "auto"
                         }}
                     >
