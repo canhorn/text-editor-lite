@@ -66,7 +66,7 @@ export class TextContentEditor extends React.Component<IProps, IState> {
     }
     private getStyles() {
         return {
-            height: "98%",
+            height: "100%",
             maxHeight: "800px"
         };
     }

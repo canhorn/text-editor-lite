@@ -23,6 +23,13 @@ export const createNewWorkspaceFile = (
 ) => WorkspaceConnection.createNewWorkspaceFile(workspace, folders, fileName);
 export const deleteWorkspace = (workspace: string) =>
     WorkspaceConnection.deleteWorkspace(workspace);
+export const removeWorkspaceFolder = (workspace: string, folders: string[]) =>
+    WorkspaceConnection.deleteWorkspaceFolder(workspace, folders);
+export const removeWorkspaceFile = (
+    workspace: string,
+    folders: string[],
+    fileName: string
+) => WorkspaceConnection.deleteWorkspaceFile(workspace, folders, fileName);
 export const getWorkspaceEditorExplorer = (workspace: string) =>
     WorkspaceConnection.getWorkspaceEditorExplorer(workspace);
 export const getWorkspaceFileContent = (

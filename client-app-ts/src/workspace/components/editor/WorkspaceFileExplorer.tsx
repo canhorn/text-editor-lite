@@ -10,7 +10,9 @@ import {
 import {
     createNewWorkspaceFile,
     createNewWorkspaceFolder,
-    getWorkspaceEditorExplorer
+    getWorkspaceEditorExplorer,
+    removeWorkspaceFile,
+    removeWorkspaceFolder
 } from "../../connection/WorkspaceConnectionActions";
 import { IWorkspaceCommandResponse } from "../../model/IWorkspaceCommandResponse";
 import { IWorkspaceEditorExplorer } from "../../model/IWorkspaceState";
@@ -82,7 +84,7 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
     }
 
     private getContextMenuItems(): IContentMenuItem[] {
-        return [
+        const contextMenuList: IContentMenuItem[] = [
             {
                 key: "menu-item-1",
                 type: "ITEM",
@@ -94,18 +96,28 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
                 type: "ITEM",
                 label: "New File",
                 onClick: this.createNewFile
-            },
-            {
-                key: "menu-spacer-1",
-                type: "SPACER"
-            },
-            {
-                key: "menu-item-3",
-                type: "ITEM",
-                label: "Delete",
-                onClick: () => showMessage("Delete")
             }
         ];
+        const { contextMenuOpenedAt } = this.state;
+        if (
+            contextMenuOpenedAt === undefined ||
+            (contextMenuOpenedAt !== undefined &&
+                contextMenuOpenedAt.name !== contextMenuOpenedAt.parentFolder)
+        ) {
+            contextMenuList.push(
+                {
+                    key: "menu-spacer-1",
+                    type: "SPACER"
+                },
+                {
+                    key: "menu-item-3",
+                    type: "ITEM",
+                    label: "Delete",
+                    onClick: this.deleteNode
+                }
+            );
+        }
+        return contextMenuList;
     }
 
     @autobind
@@ -123,25 +135,6 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
             folderList = folderList.slice(1);
             createNewWorkspaceFolder(workspace, folderList, folderName).then(
                 this.onWorkspaceFolderCreated
-            );
-        }
-    }
-    @autobind
-    private onWorkspaceFolderCreated(response: IWorkspaceCommandResponse) {
-        if (response.success) {
-            showMessage("Successfully Created Workspace Folder");
-            getWorkspaceEditorExplorer(this.props.editorExplorer.workspace);
-        } else if (response.errorCode === "workspace_contains_file") {
-            showErrorMessage("Workspace already contains a file by that name.");
-        } else if (response.errorCode === "workspace_folder_exists") {
-            showErrorMessage(
-                "Workspace already contains a folder by that name."
-            );
-        } else if (response.errorCode === "workspace_folder_invalid_name") {
-            showErrorMessage("Workspace folder name invalid.");
-        } else {
-            showErrorMessage(
-                `Cannot create workspace folder, ${response.errorCode}`
             );
         }
     }
@@ -164,6 +157,74 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
             );
         }
     }
+
+    @autobind
+    private deleteNode() {
+        const { contextMenuOpenedAt } = this.state;
+        if (contextMenuOpenedAt !== undefined) {
+            if (
+                confirm(
+                    `Are you sure want to delete, ${contextMenuOpenedAt.name}?`
+                )
+            ) {
+                // Split up the parentFolder by token
+                let folderList = splitTreeDataParentFolder(
+                    contextMenuOpenedAt.parentFolder
+                );
+                // Get Workspace folderList[0]
+                const workspace = folderList[0];
+                // Get Folder List, minus Workspace root folder
+                folderList = folderList.slice(1);
+
+                const nodeName = contextMenuOpenedAt.name;
+                if (folderList[folderList.length - 1] === nodeName) {
+                    // Remove Folder
+                    removeWorkspaceFolder(workspace, folderList)
+                        .then(this.onWorkspaceParseCommandMessage)
+                        .then((response: IWorkspaceCommandResponse) => {
+                            if (response.success) {
+                                showMessage("Successfully deleted folder.");
+                                getWorkspaceEditorExplorer(
+                                    this.props.editorExplorer.workspace
+                                );
+                            }
+                        });
+                    return;
+                }
+                // Remove File
+                removeWorkspaceFile(workspace, folderList, nodeName)
+                    .then(this.onWorkspaceParseCommandMessage)
+                    .then((response: IWorkspaceCommandResponse) => {
+                        if (response.success) {
+                            showMessage("Successfully deleted file.");
+                            getWorkspaceEditorExplorer(
+                                this.props.editorExplorer.workspace
+                            );
+                        }
+                    });
+            }
+        }
+    }
+
+    @autobind
+    private onWorkspaceFolderCreated(response: IWorkspaceCommandResponse) {
+        if (response.success) {
+            showMessage("Successfully Created Workspace Folder");
+            getWorkspaceEditorExplorer(this.props.editorExplorer.workspace);
+        } else if (response.errorCode === "workspace_contains_file") {
+            showErrorMessage("Workspace already contains a file by that name.");
+        } else if (response.errorCode === "workspace_folder_exists") {
+            showErrorMessage(
+                "Workspace already contains a folder by that name."
+            );
+        } else if (response.errorCode === "workspace_folder_invalid_name") {
+            showErrorMessage("Workspace folder name invalid.");
+        } else {
+            showErrorMessage(
+                `Cannot create workspace folder, ${response.errorCode}`
+            );
+        }
+    }
     @autobind
     private onWorkspaceFileCreated(response: IWorkspaceCommandResponse) {
         if (response.success) {
@@ -182,6 +243,15 @@ export default class WorkspaceFileExplorer extends Component<IProps, IState> {
                 `Cannot create workspace file, ${response.errorCode}`
             );
         }
+    }
+    @autobind
+    private onWorkspaceParseCommandMessage(
+        response: IWorkspaceCommandResponse
+    ) {
+        if (!response.success) {
+            showErrorMessage("Failed to delete folder.");
+        }
+        return response;
     }
 
     @autobind

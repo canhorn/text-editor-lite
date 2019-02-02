@@ -122,6 +122,34 @@ class WorkspaceConnectionImpl {
         );
         return workspaceCreated;
     }
+    public async deleteWorkspaceFolder(
+        workspace: string,
+        folders: string[]
+    ): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        return await this._connection.invoke(
+            "DeleteWorkspaceFolder",
+            workspace,
+            folders
+        );
+    }
+    public async deleteWorkspaceFile(
+        workspace: string,
+        folders: string[],
+        fileName: string
+    ): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        return await this._connection.invoke(
+            "DeleteWorkspaceFile",
+            workspace,
+            folders,
+            fileName
+        );
+    }
     public async getWorkspaceEditorExplorer(
         workspace: string
     ): Promise<IWorkspaceEditorExplorer> {
