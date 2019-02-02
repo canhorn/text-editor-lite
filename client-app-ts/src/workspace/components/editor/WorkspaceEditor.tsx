@@ -1,8 +1,11 @@
 import React, { Component } from "react";
+import { resizeEditors } from "../../../editor/EditorActions";
+import { autobind } from "../../../shared/Autobind";
 import { eventService } from "../../../shared/EventService";
 import {
     getWorkspaceEditorExplorer,
-    getWorkspaceFileContent
+    getWorkspaceFileContent,
+    saveWorkspacePendingFileContent
 } from "../../connection/WorkspaceConnectionActions";
 import {
     IWorkspace,
@@ -10,16 +13,13 @@ import {
     IWorkspaceFileContent
 } from "../../model/IWorkspaceState";
 import WorkspaceStore, {
+    CLEAR_WORKSPACE_PENDING_SAVE_EVENT,
     getWorkspaceEditorExplorerByWorkspace,
     getWorkspaceFileContentByWorkspaceFoldersFile,
     WORKSPACE_STORE_CHANGED
 } from "../../store/WorkspaceStore";
-import WorkspaceFileExplorer, { ISelectedFile } from "./WorkspaceFileExplorer";
-import { autobind } from "../../../shared/Autobind";
 import WorkspaceFileEdit from "./content/WorkspaceFileEdit";
-import { CLEAR_WORKSPACE_PENDING_SAVE_EVENT } from "../../store/WorkspaceStore";
-import { saveWorkspacePendingFileContent } from "../../connection/WorkspaceConnectionActions";
-import { resizeEditors } from "../../../editor/EditorActions";
+import WorkspaceFileExplorer, { ISelectedFile } from "./WorkspaceFileExplorer";
 
 interface IProps {
     workspace: IWorkspace;
@@ -95,7 +95,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                     </div>
                     <div
                         style={{
-                            height: "99%",
+                            height: "100%",
                             padding: "0.1em",
                             minHeight: "20em"
                         }}

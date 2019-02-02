@@ -47,6 +47,18 @@ namespace EventHorizon.CodeEditorLite.Hubs
                 }
             );
         }
+        public Task<WorkspaceCommandResponse> DeleteWorkspaceFolder(string workspace, string[] folderList)
+        {
+            return _mediator.Send(
+                new DeleteWorkspaceFolderCommand(workspace, folderList)
+            );
+        }
+        public Task<WorkspaceCommandResponse> DeleteWorkspaceFile(string workspace, string[] folderList, string fileName)
+        {
+            return _mediator.Send(
+                new DeleteWorkspaceFileCommand(workspace, folderList, fileName)
+            );
+        }
 
         public Task<IEnumerable<IWorkspace>> GetDeletedWorkspaceList()
         {
