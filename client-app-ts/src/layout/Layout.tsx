@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import { ToasterContainer } from "../shared/components/toaster/ToasterContainer";
 
 class Layout extends Component {
     render() {
@@ -14,6 +15,7 @@ class Layout extends Component {
                     </NavLink>
                 </div>
                 <div>{this.props.children}</div>
+                <ToasterContainer />
             </div>
         );
     }

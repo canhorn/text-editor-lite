@@ -12,6 +12,8 @@ import {
     WORKSPACE_CONNECTED_EVENT,
     WORKSPACE_DISCONNECTED_EVENT
 } from "../store/WorkspaceStore";
+import { getWorkspaceList } from "./WorkspaceConnectionActions";
+import { IWorkspaceCommandResponse } from '../model/IWorkspaceCommandResponse';
 
 class WorkspaceConnectionImpl {
     _connection: HubConnection | undefined = undefined;
@@ -63,6 +65,30 @@ class WorkspaceConnectionImpl {
             data: workspaceList
         });
         return workspaceList;
+    }
+    public async createWorkspace(workspace: string): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        const workspaceCreated = await this._connection.invoke(
+            "CreateWorkspace",
+            workspace
+        );
+        // Request the updated workspace list.
+        getWorkspaceList();
+        return workspaceCreated;
+    }
+    public async deleteWorkspace(workspace: string): Promise<IWorkspaceCommandResponse> {
+        if (!this._connection) {
+            throw new Error("not_connected");
+        }
+        const workspaceCreated = await this._connection.invoke(
+            "DeleteWorkspace",
+            workspace
+        );
+        // Request the updated workspace list.
+        getWorkspaceList();
+        return workspaceCreated;
     }
     public async getWorkspaceEditorExplorer(
         workspace: string

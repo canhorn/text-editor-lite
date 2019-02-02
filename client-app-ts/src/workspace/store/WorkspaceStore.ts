@@ -45,6 +45,9 @@ const createFileContentKey = (fileContent: IWorkspaceFileContent) =>
     "/" +
     fileContent.fileName;
 const setFileContent = (fileContent: IWorkspaceFileContent) => {
+    if (fileContent.workspace === undefined) {
+        return;
+    }
     STATE.fileContent.set(createFileContentKey(fileContent), fileContent);
     eventService.publish({ name: WORKSPACE_STORE_CHANGED });
 };
