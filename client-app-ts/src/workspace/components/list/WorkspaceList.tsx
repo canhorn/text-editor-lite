@@ -94,6 +94,7 @@ class WorkspaceList extends Component<IProps, IState> {
     private onCreatedWorkspace(response: IWorkspaceCommandResponse) {
         if (response.success) {
             showMessage("Successfully Created Workspace");
+            getWorkspaceList();
         } else if (response.errorCode === "workspace_already_exists") {
             showErrorMessage("Cannot create workspace, already exists.");
         } else {
@@ -104,6 +105,7 @@ class WorkspaceList extends Component<IProps, IState> {
     private onDeletedWorkspace(response: IWorkspaceCommandResponse) {
         if (response.success) {
             showMessage("Successfully Deleted Workspace");
+            getWorkspaceList();
         } else if (response.errorCode === "workspace_not_found") {
             showErrorMessage("Cannot delete workspace, not found.");
         } else {

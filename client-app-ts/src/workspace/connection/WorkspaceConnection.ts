@@ -7,13 +7,9 @@ import {
     IWorkspaceFileContent
 } from "../model/IWorkspaceState";
 import {
-    SET_WORKSPACE_EDITOR_EXPLORER,
-    SET_WORKSPACE_FILE_CONTENT_EVENT,
-    SET_WORKSPACE_LIST,
     WORKSPACE_CONNECTED_EVENT,
     WORKSPACE_DISCONNECTED_EVENT
 } from "../store/WorkspaceStore";
-import { getWorkspaceList } from "./WorkspaceConnectionActions";
 
 class WorkspaceConnectionImpl {
     _connection: HubConnection | undefined = undefined;
@@ -59,12 +55,7 @@ class WorkspaceConnectionImpl {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceList = await this._connection.invoke("GetWorkspaceList");
-        eventService.publish({
-            name: SET_WORKSPACE_LIST,
-            data: workspaceList
-        });
-        return workspaceList;
+        return await this._connection.invoke("GetWorkspaceList");
     }
     public async createWorkspace(
         workspace: string
@@ -72,13 +63,7 @@ class WorkspaceConnectionImpl {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceCreated = await this._connection.invoke(
-            "CreateWorkspace",
-            workspace
-        );
-        // Request the updated workspace list.
-        getWorkspaceList();
-        return workspaceCreated;
+        return await this._connection.invoke("CreateWorkspace", workspace);
     }
     public async createNewWorkspaceFolder(
         workspace: string,
@@ -116,11 +101,7 @@ class WorkspaceConnectionImpl {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceCreated = await this._connection.invoke(
-            "DeleteWorkspace",
-            workspace
-        );
-        return workspaceCreated;
+        return await this._connection.invoke("DeleteWorkspace", workspace);
     }
     public async deleteWorkspaceFolder(
         workspace: string,
@@ -156,15 +137,10 @@ class WorkspaceConnectionImpl {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceEditorExplorer = await this._connection.invoke(
+        return await this._connection.invoke(
             "GetWorkspaceEditorExplorer",
             workspace
         );
-        eventService.publish({
-            name: SET_WORKSPACE_EDITOR_EXPLORER,
-            data: workspaceEditorExplorer
-        });
-        return workspaceEditorExplorer;
     }
     public async getWorkspaceFileContent(
         workspace: string,
@@ -174,33 +150,23 @@ class WorkspaceConnectionImpl {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceFileContent = await this._connection.invoke(
+        return await this._connection.invoke(
             "GetWorkspaceFileContent",
             workspace,
             folders,
             fileName
         );
-        eventService.publish({
-            name: SET_WORKSPACE_FILE_CONTENT_EVENT,
-            data: workspaceFileContent
-        });
-        return workspaceFileContent;
     }
     public async saveWorkspacePendingFileContent(
         fileContent: IWorkspaceFileContent
-    ) {
+    ): Promise<IWorkspaceFileContent> {
         if (!this._connection) {
             throw new Error("not_connected");
         }
-        const workspaceFileContent = await this._connection.invoke(
+        return await this._connection.invoke(
             "SaveWorkspaceFileContent",
             fileContent
         );
-        eventService.publish({
-            name: SET_WORKSPACE_FILE_CONTENT_EVENT,
-            data: workspaceFileContent
-        });
-        return workspaceFileContent;
     }
 }
 
