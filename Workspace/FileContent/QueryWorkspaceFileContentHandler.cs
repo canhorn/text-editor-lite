@@ -19,20 +19,29 @@ namespace EventHorizon.CodeEditorLite.Workspace.FileContent
         }
         public async Task<WorkspaceFileContent> Handle(QueryWorkspaceFileContentEvent request, CancellationToken cancellationToken)
         {
+            var contentPath = GetContenPath(request);
+            if (!File.Exists(contentPath))
+            {
+                return WorkspaceFileContent.NULL;
+            }
             return new WorkspaceFileContent
             {
                 Workspace = request.Workspace,
                 FileName = request.FileName,
                 FolderList = request.FolderList,
                 Content = await File.ReadAllTextAsync(
-                    Path.Combine(
-                        this.GetWorkspacesPath(),
-                        request.Workspace,
-                        Path.Combine(request.FolderList),
-                        request.FileName
-                    )
+                    contentPath
                 )
             };
+        }
+        private string GetContenPath(QueryWorkspaceFileContentEvent request)
+        {
+            return Path.Combine(
+                this.GetWorkspacesPath(),
+                request.Workspace,
+                Path.Combine(request.FolderList),
+                request.FileName
+            );
         }
 
         private string GetWorkspacesPath()

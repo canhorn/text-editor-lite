@@ -4,6 +4,10 @@ import { IWorkspaceFileContent } from "../model/IWorkspaceState";
 export const startWorkspaceConnection = () => WorkspaceConnection.start();
 export const stopWorkspaceConnection = () => WorkspaceConnection.stop();
 export const getWorkspaceList = () => WorkspaceConnection.getWorkspaceList();
+export const createWorkspace = (workspace: string) =>
+    WorkspaceConnection.createWorkspace(workspace);
+export const deleteWorkspace = (workspace: string) =>
+    WorkspaceConnection.deleteWorkspace(workspace);
 export const getWorkspaceEditorExplorer = (workspace: string) =>
     WorkspaceConnection.getWorkspaceEditorExplorer(workspace);
 export const getWorkspaceFileContent = (

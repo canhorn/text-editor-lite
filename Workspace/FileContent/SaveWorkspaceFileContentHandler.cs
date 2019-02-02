@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace EventHorizon.CodeEditorLite.Workspace.FileContent
 {
-    public struct CommandSaveWorkspaceFileContentHandler : IRequestHandler<CommandSaveWorkspaceFileContentEvent, WorkspaceFileContent>
+    public struct SaveWorkspaceFileContentHandler : IRequestHandler<SaveWorkspaceFileContentCommand, WorkspaceFileContent>
     {
         readonly IMediator _mediator;
         readonly IHostingEnvironment _hostingEnvironment;
-        public CommandSaveWorkspaceFileContentHandler(
+        public SaveWorkspaceFileContentHandler(
             IMediator mediator,
             IHostingEnvironment hostingEnvironment
         )
@@ -20,7 +20,7 @@ namespace EventHorizon.CodeEditorLite.Workspace.FileContent
             _mediator = mediator;
             _hostingEnvironment = hostingEnvironment;
         }
-        public async Task<WorkspaceFileContent> Handle(CommandSaveWorkspaceFileContentEvent request, CancellationToken cancellationToken)
+        public async Task<WorkspaceFileContent> Handle(SaveWorkspaceFileContentCommand request, CancellationToken cancellationToken)
         {
             var fileContent = request.FileContent;
             var saveDirectory = Path.Combine(
