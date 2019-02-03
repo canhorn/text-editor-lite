@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using EventHorizon.CodeEditorLite.Workspace.Model;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace EventHorizon.CodeEditorLite.Workspace.Create
 {
     public struct CreateWorkspaceFileHandler : IRequestHandler<CreateWorkspaceFileCommand, WorkspaceCommandResponse>
     {
-        IHostingEnvironment _hostingEnvironment;
+        readonly ILogger _logger;
+        readonly IHostingEnvironment _hostingEnvironment;
         public CreateWorkspaceFileHandler(
+            ILogger<CreateWorkspaceFileHandler> logger,
             IHostingEnvironment hostingEnvironment
         )
         {
+            _logger = logger;
             _hostingEnvironment = hostingEnvironment;
         }
         public Task<WorkspaceCommandResponse> Handle(CreateWorkspaceFileCommand request, CancellationToken cancellationToken)
@@ -52,6 +56,7 @@ namespace EventHorizon.CodeEditorLite.Workspace.Create
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Exception Creating Workspace File");
                 return Task.FromResult(
                     new WorkspaceCommandResponse("error")
                 );

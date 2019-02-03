@@ -1,6 +1,6 @@
 import { ITreeNode } from "../../TreeViewModel";
 export default {
-    toggle: ({ node: { toggled } }: { node: ITreeNode }) => ({
+    toggle: ({ node: { toggled } }: { node: ITreeNode<any> }) => ({
         animation: { rotateZ: toggled ? 90 : 0 },
         duration: 300
     }),
