@@ -18,38 +18,54 @@ namespace EventHorizon.CodeEditorLite.Workspace.Editor
         {
             _hostingEnvironment = hostingEnvironment;
         }
-        public async Task<WorkspaceEditorExplorer> Handle(QueryWorkspaceEditorExplorerEvent request, CancellationToken cancellationToken)
+        public Task<WorkspaceEditorExplorer> Handle(QueryWorkspaceEditorExplorerEvent request, CancellationToken cancellationToken)
         {
-            return new WorkspaceEditorExplorer
-            {
-                Workspace = request.Workspace,
-                Root = new EditorFolder
+            return Task.FromResult(
+                new WorkspaceEditorExplorer
                 {
-                    Name = request.Workspace,
-                    FileNameList = GetFileNameList(GetWorkspacePath(_hostingEnvironment.ContentRootPath, request.Workspace)),
-                    FolderList = GetFolderList(request.Workspace, GetWorkspacePath(_hostingEnvironment.ContentRootPath, request.Workspace))
+                    Workspace = request.Workspace,
+                    Root = new EditorFolder
+                    {
+                        Name = request.Workspace,
+                        FileNameList = GetFileNameList(
+                            GetWorkspacePath(
+                                _hostingEnvironment.ContentRootPath,
+                                request.Workspace
+                            )
+                        ),
+                        FolderList = GetFolderList(
+                            request.Workspace,
+                            GetWorkspacePath(
+                                _hostingEnvironment.ContentRootPath,
+                                request.Workspace
+                            )
+                        )
+                    }
                 }
-            };
+            );
         }
 
         public static string[] GetFileNameList(string directory)
         {
-            var fileList = Directory.GetFiles(directory).Select(filePath => new FileInfo(filePath).Name).ToArray();
-            return fileList;
+            return Directory
+                .GetFiles(directory)
+                .Select(
+                    filePath => new FileInfo(filePath).Name
+                ).ToArray();
         }
 
         public static EditorFolder[] GetFolderList(string workspace, string directory)
         {
-
-            var directoryList = new DirectoryInfo(directory).GetDirectories().Select(
-                directoryInfo => new EditorFolder
-                {
-                    Name = directoryInfo.Name,
-                    FolderList = GetFolderList(workspace, directoryInfo.FullName),
-                    FileNameList = GetFileNameList(directoryInfo.FullName)
-                }
-            ).ToArray();
-            return directoryList;
+            return new DirectoryInfo(directory)
+                .GetDirectories()
+                .Select(
+                    directoryInfo => new EditorFolder
+                    {
+                        Name = directoryInfo.Name,
+                        FolderList = GetFolderList(workspace, directoryInfo.FullName),
+                        FileNameList = GetFileNameList(directoryInfo.FullName)
+                    }
+                ).ToArray();
         }
 
         private static string GetWorkspacePath(string contentRootPath, string workspace)

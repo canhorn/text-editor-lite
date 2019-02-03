@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "@aspnet/signalr": "^1.1.0",
+        "@types/dateformat": "^3.0.0",
         "@types/jest": "23.3.13",
         "@types/node": "10.12.18",
         "@types/react": "16.7.20",
@@ -11,6 +12,8 @@
         "@types/react-router-bootstrap": "^0.24.5",
         "@types/react-router-dom": "^4.3.1",
         "@types/react-toastify": "^4.0.1",
+        "@types/webpack-env": "^1.13.6",
+        "dateformat": "^3.0.3",
         "monaco-editor": "^0.15.6",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
@@ -37,8 +40,5 @@
         "not dead",
         "not ie <= 11",
         "not op_mini all"
-    ],
-    "devDependencies": {
-        "@types/webpack-env": "^1.13.6"
-    }
+    ]
 }

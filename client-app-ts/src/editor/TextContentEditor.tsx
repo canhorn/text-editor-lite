@@ -29,8 +29,8 @@ export class TextContentEditor extends React.Component<IProps, IState> {
             document.getElementById(this.state.guid) as any,
             {
                 theme: "vs-dark",
-                value: this.props.initialValue
-                // language: this.props.language || "plaintext"
+                value: this.props.initialValue,
+                language: this.props.language || "plaintext"
             }
         );
         window.addEventListener("resize", this.onResize);
