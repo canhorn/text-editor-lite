@@ -20,15 +20,17 @@ Visit http://localhost:5000 to see it in action.
 $ docker run -v /app/App_Data:/app/App_Data -p 5000:80 -d canhorn/text-editor-lite
 ```
 
+Creates a container exposed on the hosts port 5000, with a volume mounted from the host machine to save the Workspace folders and any deleted workspace folder's as well.
+
 # How to use Code Editor Lite
 
-The Workspace page contains a list of available `workspace` folders located in the Container. On the Workspace page a new unique workspace can be created, and old can be deleted. A deleted workspace will be moved into the folder, `/app/App_Data/.deleted.Workspaces`, This is done to allow for accidental deletes.
+The Workspace page contains a list of available `workspace` folders located in the Container. On the Workspace page a new unique workspace can be created, and existing can be deleted. A deleted workspace will be moved into the folder, `/app/App_Data/.deleted.Workspaces`, this is done in the case of an accidental delete.
 
 Clicking on a Workspace will navigate to the Editor/Terminal of the workspace. The **Workspace Dashboard** starts in the **Editor**, which is a file explorer of the workspace and allows for the creation, delete, and edit of files and folders. 
 
 Right clicking on a folder or file in the Explorer will come up with Add File, Add Folder, and Delete. Choosing any option from the context menu will prompt for a name for the folder/file or verification of delete of the file/folder. Left-clicking on a folder will expand the folder, right-clicking on a folder will load its content and allow for edits. 
 
-The **Editor** will save on five (5) second intervals, or moving to a new area and not saved will prompt to save.
+The **Editor** will save on five (5) second intervals, or opening a new file, if not saved, will prompt to save.
 
 Opening the **Terminal** tab will show a Command Prompt to send commands to the Server in the context of the workspace.
 
