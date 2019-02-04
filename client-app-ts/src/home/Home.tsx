@@ -1,24 +1,22 @@
 import React, { Component, useState } from "react";
-import logo from "./logo.svg";
 import "./Home.css";
+import { Ghost } from "./ghost/Ghost";
 
 class Home extends Component {
     render() {
         return (
             <div className="App">
                 <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <p>
-                        Edit <code>src/App.tsx</code> and save to reload.
-                    </p>
+                    <p>Code Editor Lite</p>
                     <a
                         className="App-link"
-                        href="https://reactjs.org"
+                        href="https://github.com/canhorn/text-editor-lite"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Learn React
+                        Learn About Code Editor Lite
                     </a>
+                    <Ghost />
                 </header>
             </div>
         );

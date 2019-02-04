@@ -1,0 +1,17 @@
+.ghost-container {}
+
+.ghost {
+    z-index: -1;
+    position: fixed;
+    top: 85.5px;
+    left: 50%;
+    margin-left: -64.5px;
+    margin-top: -85.5px;
+    animation: float 13s ease-in-out infinite;
+}
+
+@keyframes float {
+    50% {
+        transform: translate(0px, 100vh);
+    }
+}
