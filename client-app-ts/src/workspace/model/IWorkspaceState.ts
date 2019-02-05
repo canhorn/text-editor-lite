@@ -25,4 +25,45 @@ export interface IWorkspaceFileContent {
     folderList: string[];
     workspace: string;
     content: string;
+    languageMode?: string;
 }
+
+export const getLanguageModeFromFileName = (fileName: string): string => {
+    const extension = fileName.split(".").pop() || "";
+
+    switch (extension.toLocaleLowerCase()) {
+        case "json":
+            return "json";
+        case "cs":
+        case "csx":
+            return "csharp";
+        case "html":
+            return "html";
+        case "js":
+            return "javascript";
+        case "ts":
+            return "typescript";
+        case "xml":
+            return "xml";
+        case "css":
+            return "css";
+        case "less":
+            return "less";
+        case "scss":
+            return "scss";
+        case "sql":
+            return "sql";
+        case "ps1":
+            return "powershell";
+        case "php":
+            return "php";
+        case "md":
+            return "markdown";
+        case "java":
+            return "java";
+        case "dockerfile":
+            return "dockerfile";
+        default:
+            return "plaintext";
+    }
+};

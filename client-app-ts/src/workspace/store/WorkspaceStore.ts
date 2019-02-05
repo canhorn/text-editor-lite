@@ -1,4 +1,5 @@
 import { eventService } from "../../shared/EventService";
+import { getLanguageModeFromFileName } from '../model/IWorkspaceState';
 import {
     IWorkspace,
     IWorkspaceEditorExplorer,
@@ -48,6 +49,7 @@ const setFileContent = (fileContent: IWorkspaceFileContent) => {
     if (fileContent.workspace === undefined) {
         return;
     }
+    fileContent.languageMode = getLanguageModeFromFileName(fileContent.fileName);
     STATE.fileContent.set(createFileContentKey(fileContent), fileContent);
     eventService.publish({ name: WORKSPACE_STORE_CHANGED });
 };

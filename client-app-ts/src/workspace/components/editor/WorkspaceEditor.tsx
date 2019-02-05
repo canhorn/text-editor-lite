@@ -95,7 +95,7 @@ export default class WorkspaceEditor extends Component<IProps, IState> {
                     </div>
                     <div
                         style={{
-                            height: "100%",
+                            height: "99%",
                             padding: "0.1em",
                             minHeight: "20em"
                         }}
