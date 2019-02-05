@@ -17,14 +17,16 @@ export default class WorkspaceFileEdit extends Component<IProps, IState> {
     public render(): JSX.Element {
         const { fileContent } = this.props;
         if (!fileContent) {
-            return <div style={{ textAlign: "center" }}>NO FILE SELECTED!!!</div>;
+            return (
+                <div style={{ textAlign: "center" }}>NO FILE SELECTED!!!</div>
+            );
         }
-
+        console.log(fileContent.languageMode);
         return (
             <TextContentEditor
                 initialValue={fileContent.content}
                 onChange={this.onContentChanged}
-                language="json"
+                language={fileContent.languageMode}
             />
         );
     }

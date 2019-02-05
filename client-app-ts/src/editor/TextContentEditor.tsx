@@ -15,6 +15,7 @@ interface IProps {
 }
 interface IState {
     guid: string;
+    language?: string;
 }
 
 export class TextContentEditor extends React.Component<IProps, IState> {
@@ -50,6 +51,20 @@ export class TextContentEditor extends React.Component<IProps, IState> {
         }
         if (nextProps.initialValue !== this.editor.getValue()) {
             this.editor.setValue(nextProps.initialValue);
+        }
+        const editorModel = this.editor.getModel();
+        if (editorModel != null && nextProps.language !== this.state.language) {
+            console.log({
+                nextPropsLanguage: nextProps.language,
+                stateLanguage: this.state.language
+            });
+            monaco.editor.setModelLanguage(
+                editorModel,
+                nextProps.language || "plaintext"
+            );
+            this.setState({
+                language: nextProps.language
+            });
         }
     }
 
